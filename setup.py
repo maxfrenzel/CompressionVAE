@@ -11,7 +11,7 @@ setuptools.setup(
     description="General purpose dimensionality reduction and manifold learning tool based on Variational Autoencoder.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/maxfrenzel/CompressionVAE",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
