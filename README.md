@@ -18,7 +18,11 @@ CompressionVAE has **several unique advantages** over the common manifold learni
 
 ## Installing CompressionVAE
 
-To locally install CompressionVAE, run the following command from the CompressionVAE root directory.
+CompressionVAE is distributed through PyPI under the name `cvae` (https://pypi.org/project/cvae/). To install the latest version, simply run
+```
+pip install cvae
+```
+Alternatively, to locally install CompressionVAE, clone this repository and run the following command from the CompressionVAE root directory.
 ```
 pip install -e .
 ```
@@ -33,7 +37,7 @@ from cvae import cvae
 When creating a CompressionVAE object for a new model, it needs to be provided a training dataset. 
 For small datasets that fit in memory we can directly follow the sklean convention. Let's look at this case first and take MNIST as an example.
 
-First, load the MNIST data. (Note: this example requirtes scikit-learn which is not installed with CVAE. Your might have to install it first by running `pip install sklearn`.)
+First, load the MNIST data. (Note: this example requires scikit-learn which is not installed with CVAE. You might have to install it first by running `pip install sklearn`.)
 ```
 from sklearn.datasets import fetch_openml
 mnist = fetch_openml('mnist_784', version=1, cache=True)
@@ -60,6 +64,8 @@ This will train the model, applying automatic learning rate scheduling based on 
 We can also stop the training process early through a KeyboardInterrupt (ctrl-c or 'interrupt kernel' in Jupyter notebook). The model will be saved at this point.
 
 It is also possible to stop training and then re-start with different parameters (see more details below).
+
+One note/warning: At the moment, the model can be quite sensitive to initialization (in some rare cases even giving NAN losses). Re-initializing/training the model can improve the results if a training run did not give satisfactory results.
 
 ### Embedding data
 Once we have a trained model (well, technically even before training, but the results would be random), we can use CVAE to compress data, embedding it into the latent space.
