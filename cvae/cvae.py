@@ -649,8 +649,8 @@ class CompressionVAE(object):
         z : array, shape (n_samples, 2)
             2D latent vectors to visualize.
 
-        labels: array, shape (n_samples), optional (default: None)
-            Label indices for each embedding.
+        labels: array or list, shape (n_samples), optional (default: None)
+            Label indices or strings for each embedding. If strings, categories parameter is ignored.
 
         categories: list of string, optional (default: None)
             Category names for indices in labels.
@@ -662,12 +662,21 @@ class CompressionVAE(object):
 
         assert z.shape[1] == 2, "Visualization only available for 2D embeddings."
 
-        # TODO: Allow string labels to be passed in rather than integer labels
-
         fig, ax = plt.subplots(1, 1, figsize=(12, 10), facecolor='w', edgecolor='k')
         if labels is None:
             s = ax.scatter(z[:, 0], z[:, 1], s=7)
         else:
+            # Check if labels are provided as indices or strings
+            if type(labels[0]) == int:
+                pass
+            elif type(labels[0]) == str:
+                # Find unique categories and convert string labels to indices
+                categories = list(set(labels))
+                str_to_int = {cat: k for k, cat in enumerate(categories)}
+                labels = [str_to_int[label] for label in labels]
+            else:
+                raise Exception('Label needs to be list of integer or string labels.')
+
             cmap = plt.get_cmap('jet', np.max(labels) - np.min(labels) + 1)
             s = ax.scatter(z[:, 0], z[:, 1], s=7, c=labels, cmap=cmap, vmin=np.min(labels) - .5,
                            vmax=np.max(labels) + .5)
