@@ -78,7 +78,8 @@ To visualize the MNIST embeddings and color them by their respective class, we c
 ```
 embedder.visualize(z, labels=[int(label) for label in mnist.target])
 ```
-Optionally we can pass the `categories` parameter, a list of strings associating names with the labels. In the case of MNIST this is irrelevant since the label and class names are the same.
+We could also passed the string labels `mnist.target` directly to `labels`, but in that case they would not necessarily be ordered from 0 to 9. 
+Optionally, if we pass `labels` as a list of integers like above, we can also pass the `categories` parameter, a list of strings associating names with the labels. In the case of MNIST this is irrelevant since the label and class names are the same.
 By default the `visualize` simply displays the plot. By setting the `filename` parameter we can alternatively save the plot to a file.
 
 ### Generating data
