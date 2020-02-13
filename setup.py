@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="cvae",
-    version="0.0.1",
+    version="0.0.2",
     author="Max Frenzel",
     author_email="maxfrenzel+cvae@gmail.com",
     description="CompressionVAE: General purpose dimensionality reduction and manifold learning tool based on "
