@@ -7,6 +7,10 @@ import shutil
 
 import numpy as np
 import tensorflow as tf
+try:
+    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+except:
+    pass
 
 # import matplotlib as mpl
 # mpl.use('TkAgg')
