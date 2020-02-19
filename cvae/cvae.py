@@ -692,3 +692,78 @@ class CompressionVAE(object):
             plt.savefig(filename)
         else:
             plt.show()
+
+    def visualize_latent_grid(self,
+                              xy_range=(-4.0, 4.0),
+                              grid_size=10,
+                              shape=(28, 28),
+                              clip=(0, 255),
+                              figsize=(12, 12),
+                              filename=None):
+        """
+        Visualize latent space by scanning over a grid, decoding, and plotting as image.
+        Note: This assumes that the data is image data with a single channel, and currently only works for
+        two-dimensional latent spaces.
+
+        Parameters
+        ----------
+        xy_range : (float, float), optional (default: (-4.0, 4.0))
+            Range in the x and y directions over which to scan.
+
+        grid_size: int, optional (default: 10)
+            Number of cells along x and y directions.
+
+        shape: (int, int), optional (default: (28, 28))
+            Original shape of the image data, used to reshape the vectors to 2d images.
+
+        clip: (float, float), optional (default: (0, 255))
+            Before displaying the image, clip the decoded data in this range.
+
+        figsize: (float, float), optional (default: (12.0, 12.0))
+
+        filename: string, optional (default: None)
+            If filename is given, save visualization to file. Otherwise display directly.
+
+        """
+
+        assert self.dim_latent == 2, "visualize_latent_grid only implemented for 2d latent spaces."
+
+        xy_extent = xy_range[1] - xy_range[0]
+        step_size = xy_extent / grid_size
+
+        # Create grid of latent variables
+        z_list = []
+        for k in range(grid_size):
+            for j in range(grid_size):
+                z_list.append([xy_range[0] + (0.5 + k) * step_size,
+                               xy_range[0] + (0.5 + j) * step_size])
+
+        z_array = np.array(z_list)
+
+        # Decode
+        x_array = self.decode(z_array)
+
+        # Arrange into image grid
+        image = []
+        for k in range(grid_size):
+            row = []
+            for j in range(grid_size):
+                index = k * grid_size + j
+                row.insert(0, np.reshape(x_array[index], shape))
+            image.append(np.concatenate(row))
+
+        # Concatenate into image
+        image = np.concatenate(image, axis=1)
+
+        # Apply clipping
+        if clip is not None:
+            image = np.clip(image, clip[0], clip[1])
+
+        # Plotting
+        fig, ax = plt.subplots(1, 1, figsize=figsize, facecolor='w', edgecolor='k')
+        plt.imshow(image, cmap='Greys_r', extent=[xy_range[0], xy_range[1], xy_range[0], xy_range[1]])
+
+        if filename is not None:
+            plt.savefig(filename)
+        else:
+            plt.show()
