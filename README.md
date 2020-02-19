@@ -104,6 +104,15 @@ z_interp = np.expand_dims(0.5*z[0] + 0.5*z[1], axis=0)
 X_interp = embedder.decode(z_interp)
 ```
 
+#### Visualizing the latent space
+In the case of image data, such as MNIST, CVAE also has a method that allows us to quickly visualize the latent space as seen through the decoder.
+To plot a 20 by 20 grid of reconstructed images, spanning the latent space region [-4, 4] in both x and y, we can run
+```
+embedder.visualize_latent_grid(xy_range=(-4.0, 4.0),
+                               grid_size=20,
+                               shape=(28, 28))
+```
+
 ## Advanced Use Cases
 The example above shows the simplest usage of CVAE. However, if desired a user can take much more control over the system and customize the model and training processes.
 
