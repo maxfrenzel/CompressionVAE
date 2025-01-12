@@ -96,8 +96,8 @@ class DataReader(object):
         if self.normalize:
             normalize(self.feat_array, self.logdir)
 
-        self.feature_placeholder = tf.placeholder(dtype=tf.float32, shape=None)
-        self.feature_queue = tf.PaddingFIFOQueue(queue_size,
+        self.feature_placeholder = tf.compat.v1.placeholder(dtype=tf.float32, shape=None)
+        self.feature_queue = tf.compat.v1.queue.PaddingFIFOQueue(queue_size,
                                                  ['float32'],
                                                  shapes=[[self.dimension]])
         self.feature_enqueue = self.feature_queue.enqueue([self.feature_placeholder])

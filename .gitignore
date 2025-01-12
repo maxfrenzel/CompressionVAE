@@ -1,0 +1,22 @@
+test_tf.py
+test_mnist.py
+
+# Python virtual environment
+venv/
+env/
+
+# Python package build files
+*.egg-info/
+dist/
+build/
+
+# Temporary files
+temp/
+*.pyc
+__pycache__/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+.DS_Store
