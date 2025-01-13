@@ -1,6 +1,3 @@
-test_tf.py
-test_mnist.py
-
 # Python virtual environment
 venv/
 env/
@@ -20,3 +17,9 @@ __pycache__/
 .idea/
 *.swp
 .DS_Store
+
+# Model output directories
+output_tf1/
+output_tf2/
+mnist_model*/
+temp_benchmark/

@@ -383,16 +383,15 @@ class VAEModel(object):
         decoder_hidden = z
 
         for l in range(self.layers_dec):
-            # print(decoder_hidden)
             decoder_hidden = tf.nn.dropout(self.activation(tf.matmul(decoder_hidden,
-                                                                     self.variables['decoder_stack'][l]['W'])
-                                                           + self.variables['decoder_stack'][l]['b']),
-                                           keep_prob=self.keep_prob)
+                                                                 self.variables['decoder_stack'][l]['W'])
+                                                       + self.variables['decoder_stack'][l]['b']),
+                                       keep_prob=self.keep_prob)
             decoder_hidden = self.activation(decoder_hidden)
 
         decoder_mu = tf.add(tf.matmul(decoder_hidden, self.variables['decoder_fc']['W_mu']),
-                            self.variables['decoder_fc']['b_mu'],
-                            name='XMu')
+                        self.variables['decoder_fc']['b_mu'],
+                        name='XMu')
 
         return decoder_mu
 

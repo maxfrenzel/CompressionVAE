@@ -20,6 +20,7 @@ import matplotlib.cm as cm
 
 import cvae.lib.data_reader_array as dra
 import cvae.lib.data_reader as dr
+import cvae.lib.data_reader_bridge as drb
 import cvae.lib.model_iaf as model
 import cvae.lib.functions as fun
 
@@ -306,8 +307,8 @@ class CompressionVAE(object):
                                                    f'{self.logdir}/params.json',
                                                    self.logdir)
                 else:
-                    self.reader = dra.DataReader(self.X, self.feature_normalization, self.coord, self.logdir)
-                    self.test_batcher = dra.Batcher(self.X_valid, self.feature_normalization, self.logdir)
+                    self.reader = drb.DataReaderBridge(self.X, self.feature_normalization, self.coord, self.logdir)
+                    self.test_batcher = drb.BatcherBridge(self.X_valid, self.feature_normalization, self.logdir)
                 self.train_batch = self.reader.dequeue_feature(self.batch_size)
 
             # Get normalisation data
@@ -501,7 +502,7 @@ class CompressionVAE(object):
                             else:
                                 test_batch_size = self.batch_size_test
 
-                            test_features = self.test_batcher.next_batch(test_batch_size)
+                            test_features = self.test_batcher.next_batch(test_batch_size, sess=self.sess)
 
                             loss_value_test = self.sess.run([self.loss_test],
                                                             feed_dict={self.test_feature_placeholder: test_features,
@@ -628,8 +629,11 @@ class CompressionVAE(object):
         X : array, shape (n_samples, n_features)
             Reconstruction of the data from latent code.
         """
-
-        recon = self.net.decode(np.float32(z))
+        # Convert input to float32 and create TF tensor
+        z_tensor = tf.convert_to_tensor(np.float32(z))
+        
+        # Get reconstruction from model
+        recon = self.net.decode(z_tensor)
         reconstruction = self.sess.run(recon)
 
         # Reverse data normalisation
@@ -637,9 +641,7 @@ class CompressionVAE(object):
             reconstruction = np.multiply(reconstruction, self.norm)
             reconstruction += self.mean
 
-        X = reconstruction
-
-        return X
+        return reconstruction
 
     def visualize(self,
                   z,
